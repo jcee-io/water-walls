@@ -4,7 +4,8 @@
   "description": "This mini-app is designed with a function that attains the amount of water gathered in each wall and returning the largest amount along with the indexes of the array it was passed into",
   "main": "waterWalls.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest /",
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
