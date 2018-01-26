@@ -5,7 +5,9 @@
 
 
 # Water Walls (Algorithm)
-This mini-app is designed with a function that attains the amount of water gathered between two walls.
+The mini-app is based off of and calculated by an algorithm implemented and used on the backend of the application
+
+## LINK: https://repl.it/@jvcruz/GlisteningSlateblueFlycatcher
 
 ## Summary
 The function will be passed an array of numbers signifying the height of the walls stacking together, The height of the walls will be measured in blocks, as well as the amount of water gathered.
