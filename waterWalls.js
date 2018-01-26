@@ -5,14 +5,6 @@
 // To find the peaks we would need to get the area between each of the peaks
 // a peak is a wall not submerged by water 
 
-
-Array.prototype.forEachReverse = callback => {
-  for(let i = this.length - 1; i >= 0; i--) {
-    console.log(i);
-    callback(this[i], i);
-  }
-};
-
 const traverseWalls = walls => {
   let peak = walls[0];
   let oldIndex = 0;
