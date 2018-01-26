@@ -16,5 +16,9 @@
     "url": "https://github.com/jcruzz/water-walls/issues"
   },
   "homepage": "https://github.com/jcruzz/water-walls#readme",
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "axios": "^0.17.1",
+    "express": "^4.16.2"
+  }
 }
