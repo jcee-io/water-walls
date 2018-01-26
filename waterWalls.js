@@ -5,64 +5,69 @@
 // To find the peaks we would need to get the area between each of the peaks
 // a peak is a wall not submerged by water 
 
-const traverseWalls = walls => {
-  let peak = walls[0];
-  let oldIndex = 0;
-  let temp = 0;
-  const object = {};
-  
-  walls.forEach((wall, index) => {
-    if(peak < wall) {
-      object[temp] = [oldIndex, index];
-      oldIndex = index;
-      temp = 0;
-      peak = wall;
-    }
-    if(index !== 0) {
-      temp += peak - wall;
-    }
-    
-  });
-  
-  peak = walls.pop();
-  oldIndex = walls.length;
-  
-  for(let index = walls.length; index >= 0; index--) {
-    temp = temp || 0;
-    wall = walls[index];
-    if(peak < wall) {
-      console.log(temp);
-      object[temp] = [oldIndex, index];
-      oldIndex = index;
-      temp = 0;
-      peak = wall;
-    }
-    temp += peak - wall;
+// This was created to complement Array.prototype.forEach
+Array.prototype.reverseEach = function(callback) {
+  for(let i = this.length - 1; i >= 0; i--) {
+    callback(this[i], i);
   }
-
-  
-  console.log('object');
-  return object;
 };
 
-const waterWalls = walls => {
-  let peak1, peak2;
-  let totalWater = traverseWalls(walls.slice());
-  let largest;
-  for(let amount of Object.keys(totalWater).map(Number)) {
-    largest = largest || amount;
-    
-    if(amount > largest) {
-      largest = amount;
+// Timeline
+// 1) Declare peak and indexes variable, both can be undefined
+// 2) declare a temp, oldIndex, and value variable and assign 0 to all three
+// 3) foo is a function that can either be forEach or reverseEach
+// 4) return largest pool of water and its indexes in an object
+
+// Inside foo
+// 1) The undefined peak uses the zeroth indexed wall
+//   a) The peak is the current wall we're on and is one of two walls to measure water inbetween
+// 2) As the loop iterates, each index that isn't 0 adds to temp
+//   a) temp is the variable that temporarily carries the amount of water until a wall taller than
+//      the peak is encountered
+//   b) if the condition of peak < wall is true, we create a tuple of the old and current indexes to
+//      represent both the walls we used to carry the water. we set the urrent index as the old index
+//      to find a larger collection of water
+//   c) the value variable is the largest pool of water found
+//   tl;dr the loop finds largest pool of water
+// 3) We return an object that has value and indexes properties using the same variables in the
+//    function via shorthand
+const traverse = (foo, length) => {
+  let peak, indexes;
+  let temp = oldIndex = value = 0;
+
+  foo((wall, index) => {
+    peak = peak || wall;
+    if(peak < wall) {
+      indexes = [oldIndex, index];
+      oldIndex = index;
+      value = value > temp ? value : temp;
+      temp = 0;
+      peak = wall;
     }
-  }
-  
-  console.log(totalWater);
-  return ({
-    amount: largest,
-    indexes: totalWater[largest]
+
+    if(index !== 0 || index === length - 1) {
+      temp += peak - wall;
+    } 
   });
+  
+  return ({ value, indexes });
+};
+
+// Timeline
+// 1) Destructure forEach and reverseEach from Array.prototype
+//    a) reverseEach was a custom Array function designed to complement forEach
+// 2) Invoke traverse function that returns an object that has the highest value via one-way traversal
+//    a) We will traverse the walls variable twice, forward and backwards
+// 3) Return the object with the higher value
+const waterWalls = walls => {
+  const { forEach, reverseEach } = Array.prototype;
+  let largestForward = traverse(forEach.bind(walls), walls.length);
+  let largestReverse = traverse(reverseEach.bind(walls), walls.length);
+  
+  return largestForward.value > largestReverse.value ? largestForward : largestReverse;
 };
 
 
 waterWalls([5, 3, 7, 2, 6, 4, 5, 9, 1, 2]);
+
+module.exports = waterWalls;
