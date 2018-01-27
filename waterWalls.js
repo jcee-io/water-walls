@@ -31,26 +31,23 @@ Array.prototype.reverseEach = function(callback) {
 //   tl;dr the loop finds largest pool of water
 // 3) We return an object that has value and indexes properties using the same variables in the
 //    function via shorthand
-const traverse = (foo, length) => {
-  let peak, indexes;
-  let temp = oldIndex = value = 0;
+const getStats = (waterHeight, wallHeight, index) => ({ waterHeight, wallHeight, index });
 
+const traverse = (foo, length, wallsWithWater) => {
+  let peak;
+  let tempWalls = [];
   foo((wall, index) => {
     peak = peak || wall;
     if(peak <= wall) {
-      indexes = [oldIndex, index];
-      oldIndex = index;
-      value = value > temp ? value : temp;
-      temp = 0;
+      wallsWithWater = wallsWithWater.concat(tempWalls);
+      tempWalls = [];
       peak = wall;
     }
 
-    if(index !== 0 || index === length - 1) {
-      temp += peak - wall;
-    } 
+    tempWalls.push(getStats(peak - wall, wall, index));
   });
   
-  return ({ value, indexes });
+  return wallsWithWater;
 };
 
 // Timeline
@@ -61,13 +58,16 @@ const traverse = (foo, length) => {
 // 3) Return the object with the higher value
 const waterWalls = walls => {
   const { forEach, reverseEach } = Array.prototype;
-  let largestForward = traverse(forEach.bind(walls), walls.length);
-  let largestReverse = traverse(reverseEach.bind(walls), walls.length);
-  
-  return largestForward.value > largestReverse.value ? largestForward : largestReverse;
+  let wallsWithWater = [];
+  wallsWithWater = traverse(forEach.bind(walls), walls.length, wallsWithWater);
+  wallsWithWater = traverse(reverseEach.bind(walls), walls.length, wallsWithWater);
+  console.log(wallsWithWater);
+  return wallsWithWater.reduce((acc, e) => {
+    const { index, waterHeight, wallHeight } = e;
+
+    acc[index] = acc[index] || { waterHeight, wallHeight };
+    return acc;
+  }, {});
 };
-
-
-waterWalls([5, 3, 7, 2, 6, 4, 5, 9, 1, 2]);
 
 module.exports = waterWalls;

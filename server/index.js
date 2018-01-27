@@ -9,14 +9,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('client'));
 
-app.get('/api', (req,res) => {
+app.get('/api', async (req,res) => {
 	let query = Object.keys(req.query).map(key => Number(req.query[key]));
-
 	// we're making this so that we can access this endpoint only through the js file and not browser
 	if(query.length === 0) {
 		res.redirect('/');
 	}
-  console.log(query, waterWalls(query));
+
+	let walls = waterWalls(query);
+
+	for(let i = 0; i < query.length; i++) {
+		walls[i] = walls[i] || { waterHeight: 0, wallHeight: query[i] };
+	}
+
+  console.log(walls);
+  res.json(walls)
 });
 
 app.get('*', (req,res) => {
