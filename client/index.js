@@ -9,23 +9,25 @@ const handleError = (errorMessage, object) => {
   object.value = '';
   errorMessage.textContent = 'Please enter a valid search';
 };
+
 const handler = ({ key, target }, object) => {
   if(key !== 'Enter') return;
-  let input;
+  let params;
   
   try {
-  	input = JSON.parse(`[${target.value}]`);
+  	params = JSON.parse(`[${target.value}]`);
   } catch(error) {
   	handleError(errorMessage, object);
   	return;
   }
 
-  if(!isValid(input)) {
+  if(!isValid(params)) {
 		handleError(errorMessage, object);
   	return;  	
   }
 
-  let walls = axios.get(`/api/${input}`)
+  axios.get(`/api`, { params })
+    .then(console.log);
 
   errorMessage.textContent = '';
   object.value = '';

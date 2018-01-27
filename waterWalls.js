@@ -37,7 +37,7 @@ const traverse = (foo, length) => {
 
   foo((wall, index) => {
     peak = peak || wall;
-    if(peak < wall) {
+    if(peak <= wall) {
       indexes = [oldIndex, index];
       oldIndex = index;
       value = value > temp ? value : temp;
