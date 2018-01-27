@@ -6,26 +6,12 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-	<div class="row">
-		<div class="col-md-3">
-			<p>
-				<strong>Instructions: </strong><br>
-				Wall heights are represented in an array via [1, 4, 3, 5, 2]. Please enter in colon format (i.e. '1, 2, 3, 4, 5, 6') inside of the input.
-			</p>
-			<p>
-				<strong>How to submit inputs: </strong><br>
-				Just press Enter when submitting a form. Invalid submissions will result in a 404.
-			</p>
-		</div>
-		<div id="center" class="col-md-6">
-			<h1>Water Walls</h1>
-			<input onkeypress="handler(event)" id="input" type="text" name="input">
-		</div>
-		<div class="col-md-3">
-			
-		</div>
+	<div id="center" class="col-md-6">
+		<h1 id="title">Water Walls</h1>
+		<input onkeypress="handler(event, this)" id="input" type="text" name="input">
+		<p id="error-message"></p>
 	</div>
-
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js"></script>
 	<script type="text/javascript" src="index.js"></script>
 </body>
 </html>

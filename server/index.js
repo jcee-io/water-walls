@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('client'));
 
 app.get('/api/:walls', (req,res) => {
-
+  console.log(req.params.walls);
 });
 
 app.get('*', (req,res) => {
