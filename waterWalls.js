@@ -61,7 +61,7 @@ const waterWalls = walls => {
   let wallsWithWater = [];
   wallsWithWater = traverse(forEach.bind(walls), walls.length, wallsWithWater);
   wallsWithWater = traverse(reverseEach.bind(walls), walls.length, wallsWithWater);
-  console.log(wallsWithWater);
+
   return wallsWithWater.reduce((acc, e) => {
     const { index, waterHeight, wallHeight } = e;
 

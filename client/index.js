@@ -1,5 +1,8 @@
 const errorMessage = document.getElementById('error-message');
+const mapDOM = document.getElementById('map');
+const center = document.getElementById('center');
 
+let isRendered = false;
 
 const isValid = input => {
   return input.every(e => typeof e === 'number');
@@ -21,13 +24,13 @@ const createMap = walls => {
 		let temp = [];
 		for(let j = 0; j < largestHeight; j++) {
 			if(wallHeight > 0) {
-				temp.push('wall');
+				temp.push('<div class="block wall"></div>');
 				wallHeight--;
 			} else if (waterHeight > 0) {
-				temp.push('water');
+				temp.push('<div class="block water"></div>');
 				waterHeight--;
 			} else {
-				temp.push('air');
+				temp.push('<div class="block air"></div>');
 			}
 		}
 		map.push(temp);
@@ -55,7 +58,24 @@ const handler = ({ key, target }, object) => {
 
   axios.get(`/api`, { params })
     .then(({ data }) => createMap(data))
-    .then(console.log);
+    .then(map => {
+
+    	if(isRendered) {
+    		mapDOM.innerHTML = '';
+    	}
+
+    	center.style.marginTop = '5%';
+    	isRendered = true;
+
+    	for(let i = 0; i < map.length; i++) {
+    		mapDOM.innerHTML += `<div id="${i}"></div>`;
+    		let wall = document.getElementById(i);
+    		console.log(wall);
+    		for(let block of map[i]){
+    			wall.innerHTML = block + wall.innerHTML;
+    		};
+    	}
+    });
 
   errorMessage.textContent = '';
   object.value = '';
