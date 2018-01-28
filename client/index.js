@@ -13,31 +13,13 @@ const handleError = (errorMessage, object) => {
   errorMessage.textContent = 'Please enter a valid search';
 };
 
-
-const createMap = walls => {
-	const map = [];
-	const wallArr = Object.keys(walls).map(index => walls[index]);
-	const largestHeight = wallArr.reduce((acc, wall) => Math.max(acc, wall.wallHeight), walls[0].wallHeight);
-
-	for(let i = 0; i < Object.keys(walls).length; i++){
-		let { waterHeight, wallHeight } = walls[i];
-		let temp = [];
-		for(let j = 0; j < largestHeight; j++) {
-			if(wallHeight > 0) {
-				temp.push('<div class="block wall"></div>');
-				wallHeight--;
-			} else if (waterHeight > 0) {
-				temp.push('<div class="block water"></div>');
-				waterHeight--;
-			} else {
-				temp.push('<div class="block air"></div>');
-			}
-		}
-		map.push(temp);
+const appendDOM = (i, section) => {
+	mapDOM.innerHTML += `<div id="${i}"></div>`;
+	let wall = document.getElementById(i);
+	console.log(wall);
+	for(let block of section){
+		wall.innerHTML = block + wall.innerHTML;
 	}
-
-	console.log(largestHeight);
-	return map;
 };
 
 const handler = ({ key, target }, object) => {
@@ -57,9 +39,8 @@ const handler = ({ key, target }, object) => {
   }
 
   axios.get(`/api`, { params })
-    .then(({ data }) => createMap(data))
-    .then(map => {
-
+    .then(({ data }) => {
+    	let map = data;
     	if(isRendered) {
     		mapDOM.innerHTML = '';
     	}
@@ -67,14 +48,7 @@ const handler = ({ key, target }, object) => {
     	center.style.marginTop = '5%';
     	isRendered = true;
 
-    	for(let i = 0; i < map.length; i++) {
-    		mapDOM.innerHTML += `<div id="${i}"></div>`;
-    		let wall = document.getElementById(i);
-    		console.log(wall);
-    		for(let block of map[i]){
-    			wall.innerHTML = block + wall.innerHTML;
-    		};
-    	}
+    	map.forEach((section, i) => appendDOM(i, section));
     });
 
   errorMessage.textContent = '';

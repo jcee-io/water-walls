@@ -57,8 +57,33 @@ const traverse = (foo, length, wallsWithWater) => {
 //    a) We will traverse the walls variable twice, forward and backwards
 // 3) Return the object with the higher value
 
+const createMap = walls => {
+  const map = [];
+  const wallArr = Object.keys(walls).map(index => walls[index]);
+  const largestHeight = wallArr.reduce((acc, wall) => Math.max(acc, wall.wallHeight), walls[0].wallHeight);
 
-const createMap = (walls, wallsWithWater)  => {
+  for(let i = 0; i < Object.keys(walls).length; i++){
+    let { waterHeight, wallHeight } = walls[i];
+    let temp = [];
+    for(let j = 0; j < largestHeight; j++) {
+      if(wallHeight > 0) {
+        temp.push('<div class="block wall"></div>');
+        wallHeight--;
+      } else if (waterHeight > 0) {
+        temp.push('<div class="block water"></div>');
+        waterHeight--;
+      } else {
+        temp.push('<div class="block air"></div>');
+      }
+    }
+    map.push(temp);
+  }
+
+  console.log(largestHeight);
+  return map;
+};
+
+const createStats = (walls, wallsWithWater)  => {
   let reduced = wallsWithWater.reduce((acc, e) => {
     const { index, waterHeight, wallHeight } = e;
 
@@ -70,7 +95,7 @@ const createMap = (walls, wallsWithWater)  => {
     reduced[i] = reduced[i] || { waterHeight: 0, wallHeight: walls[i] };
   }
 
-  return reduced;
+  return createMap(reduced);
 };
 
 const waterWalls = walls => {
@@ -79,7 +104,7 @@ const waterWalls = walls => {
   wallsWithWater = traverse(forEach.bind(walls), walls.length, wallsWithWater);
   wallsWithWater = traverse(reverseEach.bind(walls), walls.length, wallsWithWater);
 
-  return createMap(walls, wallsWithWater);
+  return createStats(walls, wallsWithWater);
 };
 
 module.exports = waterWalls;
