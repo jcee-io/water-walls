@@ -17,12 +17,6 @@ app.get('/api', async (req,res) => {
 	}
 
 	let walls = waterWalls(query);
-
-	for(let i = 0; i < query.length; i++) {
-		walls[i] = walls[i] || { waterHeight: 0, wallHeight: query[i] };
-	}
-
-  console.log(walls);
   res.json(walls)
 });
 

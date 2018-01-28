@@ -56,18 +56,30 @@ const traverse = (foo, length, wallsWithWater) => {
 // 2) Invoke traverse function that returns an object that has the highest value via one-way traversal
 //    a) We will traverse the walls variable twice, forward and backwards
 // 3) Return the object with the higher value
+
+
+const createMap = (walls, wallsWithWater)  => {
+  let reduced = wallsWithWater.reduce((acc, e) => {
+    const { index, waterHeight, wallHeight } = e;
+
+    acc[index] = acc[index] || { waterHeight, wallHeight };
+    return acc;
+  }, {});
+
+  for(let i = 0; i < walls.length; i++) {
+    reduced[i] = reduced[i] || { waterHeight: 0, wallHeight: walls[i] };
+  }
+
+  return reduced;
+};
+
 const waterWalls = walls => {
   const { forEach, reverseEach } = Array.prototype;
   let wallsWithWater = [];
   wallsWithWater = traverse(forEach.bind(walls), walls.length, wallsWithWater);
   wallsWithWater = traverse(reverseEach.bind(walls), walls.length, wallsWithWater);
 
-  return wallsWithWater.reduce((acc, e) => {
-    const { index, waterHeight, wallHeight } = e;
-
-    acc[index] = acc[index] || { waterHeight, wallHeight };
-    return acc;
-  }, {});
+  return createMap(walls, wallsWithWater);
 };
 
 module.exports = waterWalls;
