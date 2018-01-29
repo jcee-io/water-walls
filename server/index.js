@@ -18,8 +18,8 @@ app.get('/api', async (req,res) => {
 	}
 
 	let map = waterWalls(query);
-	let { indexes } = waterWallsIndex(query);
-  res.json({ map, indexes })
+	let stats = waterWallsIndex(query);
+  res.json({ map, stats })
 });
 
 app.get('*', (req,res) => {
