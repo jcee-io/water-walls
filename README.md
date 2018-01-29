@@ -27,7 +27,25 @@ This comes into place after the JSON containing the graph and indexes is returne
 
 # Server
 
+There are only three endpoints that correspond to the server which are ''/', '/api', and '\*'
 
+## '\' AKA Homepage
+
+There isn't much to say other than the fact that this is used through using express.static on the client folder as a middleware to serve the html file
+
+## '\*' AKA Anything Else That Might Lead To A 404 Error Resolved
+
+The purpose of the server is two things: 
+1) Render the html file (which is a single app)
+2) Generate JSON when requesting a graph/map of the walls and water
+
+Everything else dealing with the server is irrelevant and will automatically redirect to the home page
+
+## '/api' AKA The Endpoint That Does All The Work
+
+Before we get into detail let's talk about how this GET request works, rather than use params, we use a query that can only be called within the code rather than through the browser. In order to correspond to how '\*' works, the browser will always ensure that the query of the request is undefined (unless called in the code via the Axios request) and thus redirect to '/'. However, through the http request using the query property, we can bypass the redirect conditional, and get work done by using the waterWalls js files to return the JSON.
+
+The files that are used are the waterWalls.js file and the waterWallsIndex.js file. The former is the file that generates the graph/map to be returned to the client, while the latter generates an object containing the indexes that hold the largest water of water in between, and the amount of water itself. Both of these will be returned to the client to be used.
 
 # Algorithms
 The mini-app is based off of and calculated by an algorithm implemented and used on the backend of the application
