@@ -33,13 +33,14 @@ Array.prototype.reverseEach = function(callback) {
 //    function via shorthand
 const traverse = (foo, length) => {
   let peak, indexes;
-  let temp = oldIndex = value = 0;
+  let temp = 0, oldIndex = 0, value = 0;
 
   foo((wall, index) => {
     peak = peak || wall;
     if(peak <= wall) {
-      indexes = [oldIndex, index];
+      indexes = temp > value ? [oldIndex, index] : indexes;
       oldIndex = index;
+
       value = value > temp ? value : temp;
       temp = 0;
       peak = wall;
@@ -63,7 +64,7 @@ const waterWalls = walls => {
   const { forEach, reverseEach } = Array.prototype;
   let largestForward = traverse(forEach.bind(walls), walls.length);
   let largestReverse = traverse(reverseEach.bind(walls), walls.length);
-  
+  console.log(largestForward, largestReverse);
   return largestForward.value > largestReverse.value ? largestForward : largestReverse;
 };
 
