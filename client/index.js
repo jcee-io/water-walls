@@ -13,13 +13,22 @@ const handleError = (errorMessage, object) => {
   errorMessage.textContent = 'Please enter a valid search';
 };
 
-const appendDOM = (i, section) => {
+const appendDOM = (i, section, indexes) => {
 	mapDOM.innerHTML += `<div id="${i}"></div>`;
 	let wall = document.getElementById(i);
-	console.log(wall);
+
 	for(let block of section){
 		wall.innerHTML = block + wall.innerHTML;
 	}
+
+	if(indexes.includes(i - 1)) {
+		[...wall.children].forEach(block => {
+			if(block.classList.value === "block wall"){
+				block.style.background = 'black';
+			}
+		});	
+	}
+	
 };
 
 const handler = ({ key, target }, object) => {
@@ -40,15 +49,18 @@ const handler = ({ key, target }, object) => {
 
   axios.get(`/api`, { params })
     .then(({ data }) => {
-    	let map = data;
+    	let { map, indexes } = data;
     	if(isRendered) {
     		mapDOM.innerHTML = '';
     	}
-
+    	console.log(indexes);
     	center.style.marginTop = '5%';
     	isRendered = true;
 
-    	map.forEach((section, i) => appendDOM(i, section));
+    	let labels = map[0].reduce((acc, block, index) => acc.concat(`<div class="block air">${index + 1}</div>`),[]);
+
+    	map.unshift(labels);
+    	map.forEach((section, i) => appendDOM(i, section, indexes));
     });
 
   errorMessage.textContent = '';

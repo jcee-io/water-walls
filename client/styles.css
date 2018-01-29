@@ -26,14 +26,15 @@ body {
 .block {
 	width: 40px;
 	height: 40px;
+	border: 1px grey solid;
 }
 
 .wall {
-	background: brown;
+	background: grey;
 }
 
 .water {
-	background: blue;
+	background: #00aced;
 }
 
 .air {

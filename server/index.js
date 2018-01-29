@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const waterWalls = require('../waterWalls');
+const waterWallsIndex = require('../waterWallsIndex');
 const app = express();
 
 app.use(cors());
@@ -16,8 +17,9 @@ app.get('/api', async (req,res) => {
 		res.redirect('/');
 	}
 
-	let walls = waterWalls(query);
-  res.json(walls)
+	let map = waterWalls(query);
+	let { indexes } = waterWallsIndex(query);
+  res.json({ map, indexes })
 });
 
 app.get('*', (req,res) => {
